@@ -1,12 +1,16 @@
-const routes = require('express').Router();
+const express = require('express');
+const router = express.Router(); // ← 必ずこれが必要
 
+// Swaggerルート（/api-docs でSwagger UIを表示）
 router.use('/', require('./swagger'));
 
-routes.get('/', (req, res) => {
-    //swagger.tags=['Hello World']
+// テスト用の Hello World エンドポイント
+router.get('/', (req, res) => {
+    // #swagger.tags = ['Hello World']
     res.send('Hello World!');
 });
 
-routes.use('/users', require('./users'));
+// ユーザー関連のルート（GET, POST, PUT, DELETE）
+router.use('/users', require('./users'));
 
-module.exports = routes;
+module.exports = router;
