@@ -11,7 +11,7 @@ const doc = {
 
 
 const outputFile = './swagger_output.json';
-const endpointsFiles = ['./src/routes/user.js'];
+const endpointsFiles = ['./src/routes/users.js'];
 
 //this will generate the swagger_.json
 swaggerAutogen(outputFile, endpointsFiles, doc);

@@ -3,6 +3,7 @@ const ObjectId = require('mongodb').ObjectId;
 
 // すべてのユーザーを取得
 const getAll = async (req, res) => {
+    //#swagger.tags=['Users']
     const result = await mongodb.getDatabase().db('contacts').collection('users').find();
     result.toArray().then((users) => {
         res.setHeader('Content-Type', 'application/json');
@@ -12,6 +13,7 @@ const getAll = async (req, res) => {
 
 // 指定IDのユーザーを取得
 const getSingle = async (req, res) => {
+    //#swagger.tags=['Users']
     const userId = new ObjectId(req.params.id);
     const result = await mongodb.getDatabase().db('contacts').collection('users').find({ _id: userId });
     result.toArray().then((users) => {
@@ -22,6 +24,7 @@ const getSingle = async (req, res) => {
 
 // ユーザーを作成
 const createUser = async (req, res) => {
+    //#swagger.tags=['Users']
     const user = {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
@@ -40,6 +43,7 @@ const createUser = async (req, res) => {
 
 // ユーザーを更新
 const updateUser = async (req, res) => {
+    //#swagger.tags=['Users']
     const userId = new ObjectId(req.params.id);
     const user = {
         firstName: req.body.firstName,
@@ -59,6 +63,7 @@ const updateUser = async (req, res) => {
 
 // ユーザーを削除
 const deleteUser = async (req, res) => {
+    //#swagger.tags=['Users']
     const userId = new ObjectId(req.params.id);
     const response = await mongodb.getDatabase().db('contacts').collection('users').deleteOne({ _id: userId });
     if (response.deletedCount > 0) {
