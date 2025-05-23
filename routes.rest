@@ -1,0 +1,42 @@
+### Get all users
+GET https://project1-l4hm.onrender.com/users
+Content-Type: application/json
+
+###
+
+### Get user by ID (John)
+GET https://project1-l4hm.onrender.com/users/6830453bde51510b5c59f5f4
+Content-Type: application/json
+
+###
+
+### Create a new user
+POST https://project1-l4hm.onrender.com/users
+Content-Type: application/json
+
+{
+  "firstName": "New",
+  "lastName": "Person",
+  "email": "new@example.com",
+  "favoriteColor": "pink",
+  "birthday": "2001-12-12"
+}
+
+###
+
+### Update an existing user (Alice)
+PUT https://project1-l4hm.onrender.com/users/68304556de51510b5c59f5f6
+Content-Type: application/json
+
+{
+  "firstName": "AliceUpdated",
+  "lastName": "Brown",
+  "email": "alice.updated@example.com",
+  "favoriteColor": "red",
+  "birthday": "1988-07-21"
+}
+
+###
+
+### Delete a user (Jane)
+DELETE https://project1-l4hm.onrender.com/users/6830454ade51510b5c59f5f5
