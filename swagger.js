@@ -2,15 +2,14 @@ const swaggerAutogen = require('swagger-autogen')();
 
 const doc = {
     info: {
-        title: 'Users API',
-        description: 'Users API for managing user data',
+        title: 'Items & Users API',
+        description: 'API for managing items and users',
     },
-    host: 'project1-l4hm.onrender.com', // ← localhostからRenderのURLに変更！
-    schemes: ['https'], // ← httpsだけでOK
+    host: 'project1-l4hm.onrender.com',
+    schemes: ['https'],
 };
 
 const outputFile = './swagger_output.json';
-const endpointsFiles = ['routes/users.js'];
+const endpointsFiles = ['routes/items.js', 'routes/users.js'];
 
-// This will generate swagger_output.json
 swaggerAutogen(outputFile, endpointsFiles, doc);

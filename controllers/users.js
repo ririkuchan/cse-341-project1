@@ -1,82 +1,93 @@
-const mongodb = require('../data/database');
-const ObjectId = require('mongodb').ObjectId;
+const { getDb } = require('../data/database');
+const { ObjectId } = require('mongodb');
 
-// すべてのユーザーを取得
-const getAll = async (req, res) => {
-    //#swagger.tags=['Users']
-    const result = await mongodb.getDatabase().db('contacts').collection('users').find();
-    result.toArray().then((users) => {
-        res.setHeader('Content-Type', 'application/json');
+// GET all users
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await getDb().collection('users').find().toArray();
         res.status(200).json(users);
-    });
+    } catch {
+        res.status(500).json({ error: 'Failed to fetch users' });
+    }
 };
 
-// 指定IDのユーザーを取得
-const getSingle = async (req, res) => {
-    //#swagger.tags=['Users']
-    const userId = new ObjectId(req.params.id);
-    const result = await mongodb.getDatabase().db('contacts').collection('users').find({ _id: userId });
-    result.toArray().then((users) => {
-        res.setHeader('Content-Type', 'application/json');
-        res.status(200).json(users[0]);
-    });
+// GET user by ID
+const getUserById = async (req, res) => {
+    try {
+        const id = new ObjectId(req.params.id);
+        const user = await getDb().collection('users').findOne({ _id: id });
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.status(200).json(user);
+    } catch {
+        res.status(500).json({ error: 'Invalid ID' });
+    }
 };
 
-// ユーザーを作成
+// POST user
 const createUser = async (req, res) => {
-    //#swagger.tags=['Users']
-    const user = {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        favoriteColor: req.body.favoriteColor,
-        birthday: req.body.birthday
-    };
+    try {
+        const { name, email } = req.body;
 
-    const response = await mongodb.getDatabase().db('contacts').collection('users').insertOne(user);
-    if (response.acknowledged) {
-        res.status(201).json(response);
-    } else {
-        res.status(500).json(response.error || 'An error occurred while creating the user.');
+        if (!name || !email) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
+        const result = await getDb().collection('users').insertOne({ name, email });
+        res.status(201).json(result);
+    } catch {
+        res.status(500).json({ error: 'Failed to create user' });
     }
 };
 
-// ユーザーを更新
+// PUT user
 const updateUser = async (req, res) => {
-    //#swagger.tags=['Users']
-    const userId = new ObjectId(req.params.id);
-    const user = {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        favoriteColor: req.body.favoriteColor,
-        birthday: req.body.birthday
-    };
+    try {
+        const id = new ObjectId(req.params.id);
+        const { name, email } = req.body;
 
-    const response = await mongodb.getDatabase().db('contacts').collection('users').replaceOne({ _id: userId }, user);
-    if (response.acknowledged) {
-        res.status(204).send();
-    } else {
-        res.status(500).json(response.error || 'An error occurred while updating the user.');
+        if (!name || !email) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
+        const result = await getDb().collection('users').updateOne(
+            { _id: id },
+            { $set: { name, email } }
+        );
+
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.status(200).json(result);
+    } catch {
+        res.status(500).json({ error: 'Failed to update user' });
     }
 };
 
-// ユーザーを削除
+// DELETE user
 const deleteUser = async (req, res) => {
-    //#swagger.tags=['Users']
-    const userId = new ObjectId(req.params.id);
-    const response = await mongodb.getDatabase().db('contacts').collection('users').deleteOne({ _id: userId });
-    if (response.deletedCount > 0) {
-        res.status(204).send();
-    } else {
-        res.status(500).json(response.error || 'An error occurred while deleting the user.');
+    try {
+        const id = new ObjectId(req.params.id);
+        const result = await getDb().collection('users').deleteOne({ _id: id });
+
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.status(200).json({ message: 'User deleted successfully' });
+    } catch {
+        res.status(500).json({ error: 'Failed to delete user' });
     }
 };
 
 module.exports = {
-    getAll,
-    getSingle,
+    getAllUsers,
+    getUserById,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
 };

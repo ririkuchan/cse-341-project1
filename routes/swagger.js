@@ -1,8 +1,15 @@
-const router = require('express').Router();
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('../swagger_output.json');
+const swaggerAutogen = require('swagger-autogen')();
 
-// ✅ 正しい構文
-router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+const doc = {
+    info: {
+        title: 'Items & Users API',
+        description: 'API for managing items and users',
+    },
+    host: 'project1-l4hm.onrender.com',
+    schemes: ['https'],
+};
 
-module.exports = router;
+const outputFile = './swagger_output.json';
+const endpointsFiles = ['routes/users.js', 'routes/items.js'];
+
+swaggerAutogen(outputFile, endpointsFiles, doc);
