@@ -1,36 +1,29 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Users Api",
-    "description": "Users Api",
+    "title": "Items & Users API",
+    "description": "API for managing items and users",
     "version": "1.0.0"
   },
   "host": "project1-l4hm.onrender.com",
   "basePath": "/",
   "schemes": [
-    "https",
-    "http"
+    "https"
   ],
   "paths": {
     "/": {
       "get": {
-        "tags": [
-          "Users"
-        ],
         "description": "",
-        "produces": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
       "post": {
-        "tags": [
-          "Users"
-        ],
         "description": "",
         "parameters": [
           {
@@ -39,19 +32,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "firstName": {
+                "name": {
                   "example": "any"
                 },
-                "lastName": {
+                "price": {
                   "example": "any"
                 },
-                "email": {
-                  "example": "any"
-                },
-                "favoriteColor": {
-                  "example": "any"
-                },
-                "birthday": {
+                "description": {
                   "example": "any"
                 }
               }
@@ -62,6 +49,9 @@
           "201": {
             "description": "Created"
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -70,13 +60,7 @@
     },
     "/{id}": {
       "get": {
-        "tags": [
-          "Users"
-        ],
         "description": "",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -88,13 +72,16 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
       "put": {
-        "tags": [
-          "Users"
-        ],
         "description": "",
         "parameters": [
           {
@@ -109,19 +96,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "firstName": {
+                "name": {
                   "example": "any"
                 },
-                "lastName": {
+                "price": {
                   "example": "any"
                 },
-                "email": {
-                  "example": "any"
-                },
-                "favoriteColor": {
-                  "example": "any"
-                },
-                "birthday": {
+                "description": {
                   "example": "any"
                 }
               }
@@ -129,8 +110,14 @@
           }
         ],
         "responses": {
-          "204": {
-            "description": "No Content"
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -138,9 +125,6 @@
         }
       },
       "delete": {
-        "tags": [
-          "Users"
-        ],
         "description": "",
         "parameters": [
           {
@@ -151,8 +135,11 @@
           }
         ],
         "responses": {
-          "204": {
-            "description": "No Content"
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
