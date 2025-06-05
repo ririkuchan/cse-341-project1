@@ -8,10 +8,40 @@ const {
     deleteItem
 } = require('../controllers/items'); // ← controller も必要です
 
-router.get('/', getAllItems);
-router.get('/:id', getItemById);
-router.post('/', createItem);
-router.put('/:id', updateItem);
-router.delete('/:id', deleteItem);
+router.get('/',
+    /* #swagger.tags = ['Items']
+       #swagger.description = 'Get all items'
+    */
+    getAllItems
+);
+
+router.get('/:id',
+    /* #swagger.tags = ['Items']
+       #swagger.description = 'Get item by ID'
+    */
+    getItemById
+);
+
+router.post('/',
+    /* #swagger.tags = ['Items']
+       #swagger.description = 'Create a new item'
+    */
+    createItem
+);
+
+router.put('/:id',
+    /* #swagger.tags = ['Items']
+       #swagger.description = 'Update item'
+    */
+    updateItem
+);
+
+router.delete('/:id',
+    /* #swagger.tags = ['Items']
+       #swagger.description = 'Delete item'
+    */
+    deleteItem
+);
+
 
 module.exports = router;
