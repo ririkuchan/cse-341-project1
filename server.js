@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongodb = require('./data/database');
@@ -9,6 +11,7 @@ const port = process.env.PORT || 3001;
 
 // JSONのリクエストボディを扱えるようにする
 app.use(bodyParser.json());
+
 
 // === CORS対応 ===
 app.use((req, res, next) => {

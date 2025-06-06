@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb');
 
-const client = new MongoClient(process.env.MONGODB_URL);
+const client = new MongoClient(process.env.MONGODB_URL);  // ← オプション不要！
 
 let database;
 
@@ -9,9 +9,10 @@ const initDb = async (callback) => {
         console.log('Db is already initialized!');
         return callback(null, database);
     }
+
     try {
         await client.connect();
-        database = client.db('contacts');  // ここは今まで通りOK
+        database = client.db('contacts');  // あなたのDB名：contacts → OK
         console.log('Database connected');
         callback(null, database);
     } catch (err) {
