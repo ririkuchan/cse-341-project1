@@ -9,7 +9,7 @@ const initDb = (callback) => {
     }
     MongoClient.connect(process.env.MONGODB_URL)
         .then((client) => {
-            database = client.db('contacts');  // ★ここがポイント
+            database = client.db('contacts');  // ここ超重要
             console.log('Database connected');
             callback(null, database);
         })
@@ -23,4 +23,9 @@ const getDatabase = () => {
         throw new Error('Database not initialized');
     }
     return database;
+};
+
+module.exports = {
+    initDb,
+    getDatabase
 };
