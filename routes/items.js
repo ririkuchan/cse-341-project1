@@ -24,7 +24,7 @@ router.get('/:id',
 
 router.post('/',
     /* #swagger.tags = ['Items']
-       #swagger.description = 'Create a new item'
+       #swagger.description = 'Create new item'
     */
     createItem
 );
@@ -42,6 +42,7 @@ router.delete('/:id',
     */
     deleteItem
 );
+
 
 
 module.exports = router;
