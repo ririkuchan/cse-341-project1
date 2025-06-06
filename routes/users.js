@@ -1,3 +1,10 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: API for managing users
+ */
+
 const express = require('express');
 const router = express.Router();
 const usersController = require('../controllers/users');
@@ -21,6 +28,5 @@ router.put('/:id', usersController.updateUser);
 // DELETE user
 // #swagger.tags = ['Users']
 router.delete('/:id', usersController.deleteUser);
-
 
 module.exports = router;
