@@ -1,3 +1,9 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: API for managing users
+ */
 const express = require('express');
 const router = express.Router();
 const {
