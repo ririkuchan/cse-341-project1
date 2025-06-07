@@ -1,49 +1,52 @@
-const { getDb } = require('../data/database');
+const { getDatabase } = require('../data/database');
 const { ObjectId } = require('mongodb');
 
+// GET all items
 const getAllItems = async (req, res) => {
     try {
-        const db = getDb();
-        const items = await db.collection('items').find().toArray();
+        const items = await getDatabase().collection('items').find().toArray();
         res.status(200).json(items);
-    } catch {
+    } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Failed to fetch items' });
     }
 };
 
+// GET item by ID
 const getItemById = async (req, res) => {
     try {
-        const db = getDb();
-        const item = await db.collection('items').findOne({ _id: new ObjectId(req.params.id) });
+        const item = await getDatabase().collection('items').findOne({ _id: new ObjectId(req.params.id) });
         if (!item) return res.status(404).json({ error: 'Item not found' });
         res.status(200).json(item);
-    } catch {
+    } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Invalid ID' });
     }
 };
 
+// POST item
 const createItem = async (req, res) => {
     try {
         const { name, price, description } = req.body;
         if (!name || !price || !description) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
-        const db = getDb();
-        const result = await db.collection('items').insertOne({ name, price, description });
+        const result = await getDatabase().collection('items').insertOne({ name, price, description });
         res.status(201).json(result);
-    } catch {
+    } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Failed to create item' });
     }
 };
 
+// PUT item
 const updateItem = async (req, res) => {
     try {
         const { name, price, description } = req.body;
         if (!name || !price || !description) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
-        const db = getDb();
-        const result = await db.collection('items').updateOne(
+        const result = await getDatabase().collection('items').updateOne(
             { _id: new ObjectId(req.params.id) },
             { $set: { name, price, description } }
         );
@@ -51,20 +54,22 @@ const updateItem = async (req, res) => {
             return res.status(404).json({ error: 'Item not found' });
         }
         res.status(200).json(result);
-    } catch {
+    } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Failed to update item' });
     }
 };
 
+// DELETE item
 const deleteItem = async (req, res) => {
     try {
-        const db = getDb();
-        const result = await db.collection('items').deleteOne({ _id: new ObjectId(req.params.id) });
+        const result = await getDatabase().collection('items').deleteOne({ _id: new ObjectId(req.params.id) });
         if (result.deletedCount === 0) {
             return res.status(404).json({ error: 'Item not found' });
         }
         res.status(200).json({ message: 'Item deleted successfully' });
-    } catch {
+    } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Failed to delete item' });
     }
 };

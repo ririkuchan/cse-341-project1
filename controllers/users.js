@@ -1,12 +1,13 @@
-const { getDb } = require('../data/database');
+const { getDatabase } = require('../data/database');
 const { ObjectId } = require('mongodb');
 
 // GET all users
 const getAllUsers = async (req, res) => {
     try {
-        const users = await getDb().collection('users').find().toArray();
+        const users = await getDatabase().collection('users').find().toArray();
         res.status(200).json(users);
-    } catch {
+    } catch (err) {
+        console.error(err);  // ⭐️ エラー詳細表示
         res.status(500).json({ error: 'Failed to fetch users' });
     }
 };
@@ -15,14 +16,15 @@ const getAllUsers = async (req, res) => {
 const getUserById = async (req, res) => {
     try {
         const id = new ObjectId(req.params.id);
-        const user = await getDb().collection('users').findOne({ _id: id });
+        const user = await getDatabase().collection('users').findOne({ _id: id });
 
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
 
         res.status(200).json(user);
-    } catch {
+    } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Invalid ID' });
     }
 };
@@ -36,9 +38,10 @@ const createUser = async (req, res) => {
             return res.status(400).json({ error: 'Missing required fields' });
         }
 
-        const result = await getDb().collection('users').insertOne({ name, email });
+        const result = await getDatabase().collection('users').insertOne({ name, email });
         res.status(201).json(result);
-    } catch {
+    } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Failed to create user' });
     }
 };
@@ -53,7 +56,7 @@ const updateUser = async (req, res) => {
             return res.status(400).json({ error: 'Missing required fields' });
         }
 
-        const result = await getDb().collection('users').updateOne(
+        const result = await getDatabase().collection('users').updateOne(
             { _id: id },
             { $set: { name, email } }
         );
@@ -63,7 +66,8 @@ const updateUser = async (req, res) => {
         }
 
         res.status(200).json(result);
-    } catch {
+    } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Failed to update user' });
     }
 };
@@ -72,14 +76,15 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
     try {
         const id = new ObjectId(req.params.id);
-        const result = await getDb().collection('users').deleteOne({ _id: id });
+        const result = await getDatabase().collection('users').deleteOne({ _id: id });
 
         if (result.deletedCount === 0) {
             return res.status(404).json({ error: 'User not found' });
         }
 
         res.status(200).json({ message: 'User deleted successfully' });
-    } catch {
+    } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Failed to delete user' });
     }
 };
