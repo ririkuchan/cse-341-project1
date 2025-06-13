@@ -6,12 +6,15 @@ const mongodb = require('./data/database');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger_output.json');
 
+const session = require('express-session');
+const passport = require('passport');
+require('./config/passport'); // パスポート設定読み込み
+
 const app = express();
 const port = process.env.PORT || 3001;
 
 // JSONのリクエストボディを扱えるようにする
 app.use(bodyParser.json());
-
 
 // === CORS対応 ===
 app.use((req, res, next) => {
@@ -27,12 +30,28 @@ app.use((req, res, next) => {
     next();
 });
 
+// === Session 設定 ===
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+    })
+);
+
+// === Passport 初期化 ===
+app.use(passport.initialize());
+app.use(passport.session());
+
 // === Swagger UI ===
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// === ルーティング ===
+// === 通常ルーティング ===
 app.use('/users', require('./routes/users'));
 app.use('/items', require('./routes/items'));
+
+// === 認証ルート ===
+app.use('/auth', require('./routes/auth'));
 
 // ✅ Renderの動作確認用ルート（/）
 app.get('/', (req, res) => {

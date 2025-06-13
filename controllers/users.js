@@ -7,7 +7,7 @@ const getAllUsers = async (req, res) => {
         const users = await getDatabase().collection('users').find().toArray();
         res.status(200).json(users);
     } catch (err) {
-        console.error(err);  // ⭐️ エラー詳細表示
+        console.error(err);
         res.status(500).json({ error: 'Failed to fetch users' });
     }
 };
