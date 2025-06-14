@@ -13,6 +13,8 @@ require('./config/passport'); // パスポート設定読み込み
 const app = express();
 const port = process.env.PORT || 3001;
 
+app.set('trust proxy', 1);
+
 const MongoStore = require('connect-mongo');
 
 // JSONのリクエストボディを扱えるようにする
