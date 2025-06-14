@@ -24,16 +24,19 @@ router.get('/logout', (req, res, next) => {
         req.session.destroy(err => {
             if (err) return next(err);
 
-            // 念のため domain を明示指定
+            // ✅ domain: undefined → レンダーでも自動で有効になる
             res.clearCookie('connect.sid', {
                 path: '/',
-                domain: 'project1-l4hm.onrender.com',
-                sameSite: 'none',
-                secure: true
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none'
             });
 
+            // ✅ 強制キャッシュバイパス
+            res.setHeader('Cache-Control', 'no-store');
             res.redirect('/');
         });
     });
 });
+
 module.exports = router;
