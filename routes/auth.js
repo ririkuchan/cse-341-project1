@@ -29,8 +29,10 @@ router.get('/protected', (req, res) => {
 router.get('/logout', (req, res, next) => {
     req.logout(err => {
         if (err) return next(err);
+
+        // セッション破棄とクッキー削除を追加！！
         req.session.destroy(() => {
-            res.clearCookie('connect.sid'); // ← Cookieも明示的に消す！
+            res.clearCookie('connect.sid'); // ← Cookieを明示的に削除
             res.redirect('/');
         });
     });
