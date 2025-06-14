@@ -21,9 +21,17 @@ router.get('/logout', (req, res, next) => {
     req.logout(err => {
         if (err) return next(err);
 
-        // セッション破棄とクッキー削除を追加！！
-        req.session.destroy(() => {
-            res.clearCookie('connect.sid'); // ← Cookieを明示的に削除
+        req.session.destroy(err => {
+            if (err) return next(err);
+
+            // 念のため domain を明示指定
+            res.clearCookie('connect.sid', {
+                path: '/',
+                domain: 'project1-l4hm.onrender.com',
+                sameSite: 'none',
+                secure: true
+            });
+
             res.redirect('/');
         });
     });
