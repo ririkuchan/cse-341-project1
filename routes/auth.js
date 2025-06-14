@@ -16,15 +16,6 @@ router.get('/google/callback',
     }
 );
 
-// プロテクトされたルート
-router.get('/protected', (req, res) => {
-    if (req.isAuthenticated()) {
-        res.send(`Hello, ${req.user.displayName}! This is a protected route.`);
-    } else {
-        res.redirect('/auth/google');
-    }
-});
-
 // ログアウト
 router.get('/logout', (req, res, next) => {
     req.logout(err => {

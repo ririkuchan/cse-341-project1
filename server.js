@@ -15,9 +15,6 @@ const port = process.env.PORT || 3001;
 
 const MongoStore = require('connect-mongo');
 
-// ✅ HTTPS リバースプロキシ対応（Render用）
-app.set('trust proxy', 1); // ← これが Cookie 動作に超重要！
-
 // JSONのリクエストボディを扱えるようにする
 app.use(bodyParser.json());
 
@@ -46,8 +43,8 @@ app.use(
             collectionName: 'sessions',
         }),
         cookie: {
-            secure: true,       // HTTPS専用Cookie
-            sameSite: 'none'    // OAuthでのセッション維持に必須
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'none'
         },
     })
 );
@@ -66,13 +63,13 @@ app.use('/items', require('./routes/items'));
 // === 認証ルート ===
 app.use('/auth', require('./routes/auth'));
 
-// ✅ Renderの動作確認用ルート（/protected）
-//app.get('/protected', (req, res) => {
-    //if (req.isAuthenticated()) {
-      //  res.send(`Hello, ${req.user.displayName}! This is a protected route.`);
-    //} else {
-      //  res.redirect('/auth/google');
-    //}
+// ✅ Renderの動作確認用ルート（/）
+app.get('/protected', (req, res) => {
+    if (req.isAuthenticated()) {
+        res.send(`Hello, ${req.user.displayName}! This is a protected route.`);
+    } else {
+        res.redirect('/auth/google');
+    }
 });
 
 // === MongoDB 接続後にサーバーを起動 ===
