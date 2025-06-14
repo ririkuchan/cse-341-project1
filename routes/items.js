@@ -1,8 +1,8 @@
 /**
  * @swagger
  * tags:
- *   name: Users
- *   description: API for managing users
+ *   name: Items
+ *   description: API for managing items
  */
 const express = require('express');
 const router = express.Router();
@@ -12,43 +12,56 @@ const {
     createItem,
     updateItem,
     deleteItem
-} = require('../controllers/items'); // ← controller も必要です
+} = require('../controllers/items');
 
-router.get('/',
-    /* #swagger.tags = ['Items']
-       #swagger.description = 'Get all items'
-    */
-    getAllItems
-);
+// GET all items
+/**
+ * @swagger
+ * /items:
+ *   get:
+ *     summary: Get all items
+ *     tags: [Items]
+ */
+router.get('/', getAllItems);
 
-router.get('/:id',
-    /* #swagger.tags = ['Items']
-       #swagger.description = 'Get item by ID'
-    */
-    getItemById
-);
+// GET item by ID
+/**
+ * @swagger
+ * /items/{id}:
+ *   get:
+ *     summary: Get item by ID
+ *     tags: [Items]
+ */
+router.get('/:id', getItemById);
 
-router.post('/',
-    /* #swagger.tags = ['Items']
-       #swagger.description = 'Create new item'
-    */
-    createItem
-);
+// POST new item
+/**
+ * @swagger
+ * /items:
+ *   post:
+ *     summary: Create new item
+ *     tags: [Items]
+ */
+router.post('/', createItem);
 
-router.put('/:id',
-    /* #swagger.tags = ['Items']
-       #swagger.description = 'Update item'
-    */
-    updateItem
-);
+// PUT update item
+/**
+ * @swagger
+ * /items/{id}:
+ *   put:
+ *     summary: Update item
+ *     tags: [Items]
+ */
+router.put('/:id', updateItem);
 
-router.delete('/:id',
-    /* #swagger.tags = ['Items']
-       #swagger.description = 'Delete item'
-    */
-    deleteItem
-);
-
-
+// DELETE item
+/**
+ * @swagger
+ * /items/{id}:
+ *   delete:
+ *     summary: Delete item
+ *     tags: [Items]
+ */
+router.delete('/:id', deleteItem);
 
 module.exports = router;

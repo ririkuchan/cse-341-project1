@@ -7,7 +7,7 @@ const getAllUsers = async (req, res) => {
         const users = await getDatabase().collection('users').find().toArray();
         res.status(200).json(users);
     } catch (err) {
-        console.error(err);
+        console.error('Error fetching users:', err);
         res.status(500).json({ error: 'Failed to fetch users' });
     }
 };
@@ -24,36 +24,37 @@ const getUserById = async (req, res) => {
 
         res.status(200).json(user);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Invalid ID' });
+        console.error('Error fetching user by ID:', err);
+        res.status(500).json({ error: 'Invalid ID or user not found' });
     }
 };
 
-// POST user
+// POST new user
 const createUser = async (req, res) => {
     try {
         const { name, email } = req.body;
 
         if (!name || !email) {
-            return res.status(400).json({ error: 'Missing required fields' });
+            return res.status(400).json({ error: 'Name and email are required' });
         }
 
-        const result = await getDatabase().collection('users').insertOne({ name, email });
-        res.status(201).json(result);
+        const newUser = { name, email };
+        const result = await getDatabase().collection('users').insertOne(newUser);
+        res.status(201).json({ insertedId: result.insertedId, ...newUser });
     } catch (err) {
-        console.error(err);
+        console.error('Error creating user:', err);
         res.status(500).json({ error: 'Failed to create user' });
     }
 };
 
-// PUT user
+// PUT update user
 const updateUser = async (req, res) => {
     try {
         const id = new ObjectId(req.params.id);
         const { name, email } = req.body;
 
         if (!name || !email) {
-            return res.status(400).json({ error: 'Missing required fields' });
+            return res.status(400).json({ error: 'Name and email are required' });
         }
 
         const result = await getDatabase().collection('users').updateOne(
@@ -65,9 +66,9 @@ const updateUser = async (req, res) => {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        res.status(200).json(result);
+        res.status(200).json({ message: 'User updated successfully' });
     } catch (err) {
-        console.error(err);
+        console.error('Error updating user:', err);
         res.status(500).json({ error: 'Failed to update user' });
     }
 };
@@ -84,7 +85,7 @@ const deleteUser = async (req, res) => {
 
         res.status(200).json({ message: 'User deleted successfully' });
     } catch (err) {
-        console.error(err);
+        console.error('Error deleting user:', err);
         res.status(500).json({ error: 'Failed to delete user' });
     }
 };
@@ -94,5 +95,5 @@ module.exports = {
     getUserById,
     createUser,
     updateUser,
-    deleteUser,
+    deleteUser
 };

@@ -13,6 +13,8 @@ require('./config/passport'); // パスポート設定読み込み
 const app = express();
 const port = process.env.PORT || 3001;
 
+const MongoStore = require('connect-mongo');
+
 // JSONのリクエストボディを扱えるようにする
 app.use(bodyParser.json());
 
@@ -36,8 +38,12 @@ app.use(
         secret: process.env.SESSION_SECRET,
         resave: false,
         saveUninitialized: false,
+        store: MongoStore.create({
+            mongoUrl: process.env.MONGODB_URL,
+            collectionName: 'sessions',
+        }),
         cookie: {
-            secure: false, // ← 一旦 false にして挙動確認
+            secure: process.env.NODE_ENV === 'production',
         },
     })
 );
