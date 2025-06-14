@@ -67,12 +67,12 @@ app.use('/items', require('./routes/items'));
 app.use('/auth', require('./routes/auth'));
 
 // ✅ Renderの動作確認用ルート（/protected）
-app.get('/protected', (req, res) => {
-    if (req.isAuthenticated()) {
-        res.send(`Hello, ${req.user.displayName}! This is a protected route.`);
-    } else {
-        res.redirect('/auth/google');
-    }
+//app.get('/protected', (req, res) => {
+    //if (req.isAuthenticated()) {
+      //  res.send(`Hello, ${req.user.displayName}! This is a protected route.`);
+    //} else {
+      //  res.redirect('/auth/google');
+    //}
 });
 
 // === MongoDB 接続後にサーバーを起動 ===
